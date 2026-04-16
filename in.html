@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>你好</title>
+    <style>
+        /* 内联CSS */
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+        }
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 32px 24px 16px 24px;
+            margin: 0 auto;
+            min-width: 350px;
+            min-height: 340px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #223;
+            margin-bottom: 18px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        #flash-area {
+            margin: 0 auto;
+            width: 500px;   /* 可在此处修改 SWF 容器尺寸 */
+            height: 375px;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>你好</h1>
+    <div id="flash-area">
+        <!-- Ruffle 的播放器实例将插入到这里，这是播放窗口 -->
+    </div>
+</div>
+<script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+<script>
+    // 集中参数定义，方便修改
+    const SWF_FILE_PATH = 'yp1.swf'; // 需放在与html同目录，就像你现在这样
+    const SWF_WIDTH = 500;          // 播放窗口宽度
+    const SWF_HEIGHT = 375;         // 高度
+
+    window.addEventListener("DOMContentLoaded", function() {
+        if (!window.RufflePlayer) {
+            document.getElementById('flash-area').innerText = 'Ruffle 加载失败';
+            return;
+        }
+        const ruffle = window.RufflePlayer.newest();
+        const player = ruffle.createPlayer();
+        player.style.width = SWF_WIDTH + 'px';
+        player.style.height = SWF_HEIGHT + 'px';
+        player.style.background = '#222';
+        player.allowFullscreen = true;
+
+        const flashArea = document.getElementById('flash-area');
+        flashArea.innerHTML = '';
+        flashArea.appendChild(player);
+
+        player.load(SWF_FILE_PATH).catch(e => {
+            flashArea.innerText = '无法加载 SWF 文件：' + e;
+        });
+    });
+</script>
+</body>
+</html>
